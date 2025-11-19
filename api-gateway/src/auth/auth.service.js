@@ -1,6 +1,8 @@
 // api-gateway/src/auth/auth.service.js
 import bcrypt from "bcrypt";
 
+// CREAR VARIABLES DE ENTORNO PARA OBTENER LOS DOCTORES Y PACIENTES CREADOS
+
 // === Usuarios de prueba (mock) ===
 // Contraseña: "admin"
 
