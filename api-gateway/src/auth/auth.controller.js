@@ -9,7 +9,7 @@ const router = Router();
 // === Configuración de JWT ===
 const JWT_SECRET = process.env.JWT_SECRET || "dev_secret_change_me";
 const JWT_EXP = process.env.JWT_EXP || "2m";
-const REFRESH_EXP = process.env.REFRESH_EXP || "15m";
+const REFRESH_EXP = process.env.REFRESH_EXP || "1h";
 
 // === Funciones internas ===
 function signAccessToken(user) {
