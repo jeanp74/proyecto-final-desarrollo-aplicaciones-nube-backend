@@ -55,7 +55,7 @@ export const demoUsers = [
     email: "patient@example.com",
     password: await bcrypt.hash("patient", 10),
     role: "patient",
-  },getDoctors(),getPatients()
+  }
 ];
 
 // === Almacenamiento temporal de tokens de refresh ===
