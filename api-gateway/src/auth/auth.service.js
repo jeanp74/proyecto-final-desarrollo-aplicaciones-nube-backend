@@ -15,11 +15,18 @@ export const demoUsers = [
   },
   {
     id: 2,
-    name: "Usuario Prueba",
-    email: "user@example.com",
-    password: await bcrypt.hash("user123", 10),
-    role: "user",
+    name: "Doctor de prueba",
+    email: "doctor@example.com",
+    password: await bcrypt.hash("doctor123", 10),
+    role: "doctor",
   },
+  {
+    id: 3,
+    name: "Paciente de prueba",
+    email: "patient@example.com",
+    password: await bcrypt.hash("patient123", 10),
+    role: "patient",
+  }
 ];
 
 // === Almacenamiento temporal de tokens de refresh ===

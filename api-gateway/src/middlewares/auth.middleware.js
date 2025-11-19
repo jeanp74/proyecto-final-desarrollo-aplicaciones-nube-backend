@@ -9,7 +9,7 @@ export function authenticateToken(req, res, next) {
   const token = authHeader.split(" ")[1];
   try {
     const user = jwt.verify(token, JWT_SECRET);
-    req.user = user;
+    req.user = user; // <-- AQUÍ QUEDA TODA LA INFO DEL USUARIO
     next();
   } catch {
     return res.status(403).json({ error: "Token inválido o expirado" });

@@ -38,4 +38,23 @@ router.all("/:service/*", authenticateToken, async (req, res) => {
   }
 });
 
+// === RUTA: Obtener módulos permitidos según el rol ===
+router.get("/modules", authenticateToken, (req, res) => {
+  const { role } = req.user;
+  console.log(req.user);
+
+  const ROLE_MODULES = {
+    admin: ["appointments", "doctors", "patients", "pharmacy"],
+    doctor: ["appointments", "doctors", "pharmacy"],
+    patient: ["appointments", "patients", "pharmacy"],
+  };
+
+  const allowed = ROLE_MODULES[role] || [];
+
+  return res.json({
+    role,
+    modules: allowed
+  });
+});
+
 export default router;
