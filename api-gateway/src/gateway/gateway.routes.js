@@ -41,7 +41,6 @@ router.all("/:service/*", authenticateToken, async (req, res) => {
 // === RUTA: Obtener módulos permitidos según el rol ===
 router.get("/modules", authenticateToken, (req, res) => {
   const { role } = req.user;
-  console.log(req.user);
 
   const ROLE_MODULES = {
     admin: ["appointments", "doctors", "patients", "pharmacy"],
@@ -53,7 +52,8 @@ router.get("/modules", authenticateToken, (req, res) => {
 
   return res.json({
     role,
-    modules: allowed
+    modules: allowed,
+    user: req.user
   });
 });
 
