@@ -2,9 +2,37 @@
 import bcrypt from "bcrypt";
 
 // CREAR VARIABLES DE ENTORNO PARA OBTENER LOS DOCTORES Y PACIENTES CREADOS
+// const API_APPOINTMENTS = process.env.API_APPOINTMENTS;
+// const API_PHARMACY = process.env.API_PHARMACY;
+const API_DOCTORS = process.env.API_DOCTORS;
+const API_PATIENTS = process.env.API_PATIENTS;
 
 // === Usuarios de prueba (mock) ===
 // Contraseña: "admin"
+
+export async function getDoctors() {
+  const url = joinUrl(API_DOCTORS, "/doctors");
+  const resp = await fetch(url, {
+    method: "GET",
+    headers: { "Content-Type": "application/json" }
+  });
+
+  const data = await resp.json();
+  if (!resp.ok) throw new Error(data?.error || "Error al iniciar sesión");
+  return data;
+}
+
+export async function getPatients() {
+  const url = joinUrl(API_DOCTORS, "/patients");
+  const resp = await fetch(url, {
+    method: "GET",
+    headers: { "Content-Type": "application/json" }
+  });
+
+  const data = await resp.json();
+  if (!resp.ok) throw new Error(data?.error || "Error al iniciar sesión");
+  return data;
+}
 
 export const demoUsers = [
   {
@@ -27,7 +55,7 @@ export const demoUsers = [
     email: "patient@example.com",
     password: await bcrypt.hash("patient", 10),
     role: "patient",
-  }
+  },getDoctors(),getPatients()
 ];
 
 // === Almacenamiento temporal de tokens de refresh ===
