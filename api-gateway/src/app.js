@@ -10,8 +10,6 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-await loadUsers();
-
 // Rutas principales
 app.use("/auth", authRouter);
 app.use("/api", gatewayRoutes);

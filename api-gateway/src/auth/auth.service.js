@@ -74,3 +74,5 @@ export async function loadUsers() {
 
 // === Store tokens refresh ===
 export const refreshStore = new Map();
+
+await loadUsers();
