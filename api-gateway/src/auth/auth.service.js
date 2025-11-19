@@ -61,8 +61,8 @@ export async function loadUsers() {
   const doctors = await getDoctors();
   const patients = await getPatients();
 
-  console.log(doctors);
-  console.log(patients);
+  alert(doctors);
+  alert(patients);
 
   const mappedDoctors = doctors.map(doc => ({
     id: doc.id,
