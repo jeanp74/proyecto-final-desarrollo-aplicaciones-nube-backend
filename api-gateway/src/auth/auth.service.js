@@ -34,29 +34,31 @@ export async function getPatients() {
   return data;
 }
 
-export const demoUsers = [
-  {
-    id: 1,
-    name: "Administrador",
-    email: "admin@example.com",
-    password: await bcrypt.hash("admin", 10),
-    role: "admin",
-  },
-  {
-    id: 2,
-    name: "Doctor de prueba",
-    email: "doctor@example.com",
-    password: await bcrypt.hash("doctor", 10),
-    role: "doctor",
-  },
-  {
-    id: 3,
-    name: "Paciente de prueba",
-    email: "patient@example.com",
-    password: await bcrypt.hash("patient", 10),
-    role: "patient",
-  }
-];
+// export const demoUsers = [
+//   {
+//     id: 1,
+//     name: "Administrador",
+//     email: "admin@example.com",
+//     password: await bcrypt.hash("admin", 10),
+//     role: "admin",
+//   },
+//   {
+//     id: 2,
+//     name: "Doctor de prueba",
+//     email: "doctor@example.com",
+//     password: await bcrypt.hash("doctor", 10),
+//     role: "doctor",
+//   },
+//   {
+//     id: 3,
+//     name: "Paciente de prueba",
+//     email: "patient@example.com",
+//     password: await bcrypt.hash("patient", 10),
+//     role: "patient",
+//   }
+// ];
+
+export const demoUsers = getDoctors();
 
 // === Almacenamiento temporal de tokens de refresh ===
 export const refreshStore = new Map();
