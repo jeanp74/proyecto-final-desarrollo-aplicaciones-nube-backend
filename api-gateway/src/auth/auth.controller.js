@@ -30,7 +30,7 @@ function signRefreshToken(user) {
 }
 
 // === RUTA: Login de usuario ===
-router.post("/login", async (req, res) => {
+router.get("/login", async (req, res) => {
 
     res.json({demoUsers});
 
