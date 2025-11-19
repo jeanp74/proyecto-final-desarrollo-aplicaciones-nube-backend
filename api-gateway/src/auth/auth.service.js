@@ -3,28 +3,27 @@ import bcrypt from "bcrypt";
 
 // === Usuarios de prueba (mock) ===
 // Contraseña: "admin"
-const hashedPassword = await bcrypt.hash("admin", 10);
 
 export const demoUsers = [
   {
     id: 1,
     name: "Administrador",
     email: "admin@example.com",
-    password: hashedPassword,
+    password: await bcrypt.hash("admin", 10),
     role: "admin",
   },
   {
     id: 2,
     name: "Doctor de prueba",
     email: "doctor@example.com",
-    password: await bcrypt.hash("doctor123", 10),
+    password: await bcrypt.hash("doctor", 10),
     role: "doctor",
   },
   {
     id: 3,
     name: "Paciente de prueba",
     email: "patient@example.com",
-    password: await bcrypt.hash("patient123", 10),
+    password: await bcrypt.hash("patient", 10),
     role: "patient",
   }
 ];
