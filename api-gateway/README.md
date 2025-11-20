@@ -23,17 +23,10 @@ api-gateway/
 ├── gateway/
 │   ├── gateway.routes.js       # Enrutador principal del Gateway, delega peticiones a servicios backend
 │   ├── gateway.service.js      # Proxy HTTP que reenvía solicitudes a los microservicios (pacientes, doctores, etc.)
-│   └── routes.config.js        # Mapa de rutas internas → URLs de microservicios reales
 │
 ├── middlewares/
 │   ├── auth.middleware.js      # Middleware que valida el token JWT en rutas protegidas
-│   ├── logger.middleware.js    # Middleware para registrar solicitudes entrantes
-│   └── cors.middleware.js      # Configuración global de CORS
-│
-├── utils/
-│   ├── jwt.util.js             # Funciones utilitarias para firmar y verificar tokens
-│   ├── env.util.js             # Carga de variables de entorno y configuración global
-│   └── response.util.js        # Estructura estándar para respuestas (éxito/error)
+│   ├── role.middleware.js      # Middleware que valida el rol del usuario
 │
 ├── app.js                      # Punto de entrada de la aplicación Express
 ├── Dockerfile                  # Imagen Docker para despliegue en Azure
@@ -94,29 +87,10 @@ api-gateway/
   Si el token es válido, añade la información del usuario (`req.user`) y continúa.
   Si no, devuelve un error 401.
 
-* **logger.middleware.js**
-  Muestra en consola los logs básicos de cada petición entrante (método, ruta, estado, tiempo de respuesta).
-
-* **cors.middleware.js**
-  Configura CORS para permitir peticiones desde el frontend (React/Vite o cualquier dominio permitido).
-
----
-
-### 4️⃣ `utils/`
-
-* **jwt.util.js**
-  Funciones para generar y verificar tokens JWT:
-
-  ```js
-  export function generateToken(payload) { ... }
-  export function verifyToken(token) { ... }
-  ```
-
-* **env.util.js**
-  Carga las variables desde `.env` y las valida.
-
-* **response.util.js**
-  Define respuestas estándar (por ejemplo: `success(data)` o `error(message, code)`).
+* **role.middleware.js**
+  Verifica el rol del usuario en cada solicitud protegida.
+  Si el rol es válido, continúa.
+  Si no, devuelve un error 403.
 
 ---
 
