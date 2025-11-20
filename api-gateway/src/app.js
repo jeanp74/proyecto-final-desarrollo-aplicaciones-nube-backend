@@ -27,10 +27,8 @@ function buildServiceMap(env = process.env) {
 
 
 app.get("/", (_, res) => {
-    alert(1);
     console.log(process.env);
     // console.log(buildServiceMap());
-    alert(2);
     res.json({ status: "API Gateway + Auth activo" })
 });
 
