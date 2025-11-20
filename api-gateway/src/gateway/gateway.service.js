@@ -1,6 +1,11 @@
 // src/gateway/gateway.service.js
 import fetch from "node-fetch";
 
+const API_APPOINTMENTS = process.env.API_APPOINTMENTS;
+const API_DOCTORS = process.env.API_DOCTORS;
+const API_PATIENTS = process.env.API_PATIENTS;
+const API_PHARMACY = process.env.API_PHARMACY;
+
 /**
  * Construye el mapa de servicios a partir de las variables de entorno
  * Ejemplo en env: SERVICE_USERS=https://users-api.azurewebsites.net
