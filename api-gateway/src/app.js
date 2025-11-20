@@ -3,16 +3,12 @@ import cors from "cors";
 import dotenv from "dotenv";
 import authRouter from "./auth/auth.controller.js";
 import gatewayRoutes from "./gateway/gateway.routes.js";
-import { loadUsers } from "./auth/auth.service.js";
 
 dotenv.config();
 
 const app = express();
 app.use(cors());
 app.use(express.json());
-
-await loadUsers();
-
 
 // Rutas principales
 app.use("/auth", authRouter);
