@@ -15,22 +15,24 @@ app.use("/auth", authRouter);
 app.use("/api", gatewayRoutes);
 
 function buildServiceMap(env = process.env) {
-  const map = {};
-  for (const k of Object.keys(env)) {
-    if (k.startsWith("API_")) {
-      const svc = k.slice("API_".length).toLowerCase();
-      map[svc] = env[k];
+    const map = {};
+    for (const k of Object.keys(env)) {
+        if (k.startsWith("API_")) {
+            const svc = k.slice("API_".length).toLowerCase();
+            map[svc] = env[k];
+        }
     }
-  }
-  return map;
+    return map;
 }
 
-alert(1);
-console.log(process.env);
-// console.log(buildServiceMap());
-alert(2);
 
-app.get("/", (_, res) => res.json({ status: "API Gateway + Auth activo" }));
+app.get("/", (_, res) => {
+    alert(1);
+    console.log(process.env);
+    // console.log(buildServiceMap());
+    alert(2);
+    res.json({ status: "API Gateway + Auth activo" })
+});
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`✅ Server running on port ${PORT}`));
