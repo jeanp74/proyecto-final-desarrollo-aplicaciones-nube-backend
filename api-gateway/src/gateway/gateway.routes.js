@@ -29,6 +29,11 @@ const services = ["appointments", "doctors", "patients", "pharmacy"];
 
 for (const service of services) {
   router.use(`/${service}`, authenticateToken, async (req, res) => {
+    // ✅ Evitar que la ruta raíz (/) sea reenviada (que devuelve documentación)
+    if (req.params[0] === "" || req.params[0] === "/") {
+      return res.status(404).json({ error: "Ruta no disponible a través del gateway" });
+    }
+
     const targetUrl = getTargetUrl(serviceMap, service, req.params[0]);
     if (!targetUrl) return res.status(500).json({ error: "Service not configured" });
 
