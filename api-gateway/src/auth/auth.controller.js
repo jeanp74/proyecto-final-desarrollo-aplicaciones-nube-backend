@@ -30,26 +30,24 @@ function signRefreshToken(user) {
 }
 
 // === RUTA: Login de usuario ===
-router.get("/login", async (req, res) => {
+router.post("/login", async (req, res) => {
 
-    res.json({demoUsers});
+    const { email, password } = req.body;
+    const user = demoUsers.find(u => u.email === email);
 
-    // const { email, password } = req.body;
-    // const user = demoUsers.find(u => u.email === email);
+    if (!user || !(await bcrypt.compare(password, user.password))) {
+        return res.status(401).json({ error: "Credenciales inválidas" });
+    }
 
-    // if (!user || !(await bcrypt.compare(password, user.password))) {
-    //     return res.status(401).json({ error: "Credenciales inválidas" });
-    // }
+    const accessToken = signAccessToken(user);
+    const refreshToken = signRefreshToken(user);
+    refreshStore.set(refreshToken, { userId: user.id, createdAt: Date.now() });
 
-    // const accessToken = signAccessToken(user);
-    // const refreshToken = signRefreshToken(user);
-    // refreshStore.set(refreshToken, { userId: user.id, createdAt: Date.now() });
-
-    // res.json({
-    //     success: true,
-    //     access_token: accessToken,
-    //     refresh_token: refreshToken
-    // });
+    res.json({
+        success: true,
+        access_token: accessToken,
+        refresh_token: refreshToken
+    });
 });
 
 // === RUTA: Refrescar token ===
