@@ -63,18 +63,18 @@ export async function loadUsers() {
 
   const mappedDoctors = doctors.map(doc => ({
     id: doc.id,
-    name: doc.fullName ?? doc.name,
-    email: doc.email,
-    password: bcrypt.hashSync("doctor123", 10), // contraseñas para login
-    role: "doctor",
+    name: doc.nombre_completo,
+    email: doc.correo,
+    password: bcrypt.hashSync(doc.contrasenna, 10), // contraseñas para login
+    role: doc.role,
   }));
 
   const mappedPatients = patients.map(p => ({
     id: p.id,
-    name: p.fullName ?? p.name,
-    email: p.email,
-    password: bcrypt.hashSync("patient123", 10),
-    role: "patient",
+    name: p.nombres + p.apellidos,
+    email: p.correo,
+    password: bcrypt.hashSync(p.contrasenna, 10),
+    role: p.role,
   }));
 
   demoUsers = [

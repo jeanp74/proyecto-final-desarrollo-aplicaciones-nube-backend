@@ -38,7 +38,7 @@ app.get("/", (_req, res) => {
 app.get("/doctors", async (_req, res) => {
   try {
     const r = await pool.query(
-      `SELECT id, nombre_completo, especialidad, correo, telefono, activo, role
+      `SELECT id, nombre_completo, especialidad, correo, telefono, activo, role, contrasenna
        FROM doctors_schema.medicos
        ORDER BY id ASC`
     );

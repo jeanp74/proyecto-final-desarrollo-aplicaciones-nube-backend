@@ -43,7 +43,7 @@ app.get("/", (_req, res) => {
 app.get("/patients", async (_req, res) => {
   try {
     const q = `
-      SELECT id, nombres, apellidos, documento, correo, telefono, fecha_nacimiento, genero, 'patient' role
+      SELECT id, nombres, apellidos, documento, correo, telefono, fecha_nacimiento, genero, 'patient' role, contrasenna
       FROM patients_schema.pacientes
       ORDER BY id ASC
     `;
