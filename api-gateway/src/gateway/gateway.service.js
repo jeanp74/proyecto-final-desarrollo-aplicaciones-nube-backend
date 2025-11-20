@@ -1,20 +1,15 @@
-// src/gateway/gateway.service.js
+// gateway/gateway.service.js
 import fetch from "node-fetch";
-
-const API_APPOINTMENTS = process.env.API_APPOINTMENTS;
-const API_DOCTORS = process.env.API_DOCTORS;
-const API_PATIENTS = process.env.API_PATIENTS;
-const API_PHARMACY = process.env.API_PHARMACY;
 
 /**
  * Construye el mapa de servicios a partir de las variables de entorno
- * Ejemplo en env: SERVICE_USERS=https://users-api.azurewebsites.net
+ * Ejemplo en env: API_APPOINTMENTS=https://appointments-api.azurewebsites.net
  */
 export function buildServiceMap(env = process.env) {
   const map = {};
   for (const k of Object.keys(env)) {
-    if (k.startsWith("SERVICE_")) {
-      const svc = k.slice("SERVICE_".length).toLowerCase();
+    if (k.startsWith("API_")) {
+      const svc = k.slice("API_".length).toLowerCase();
       map[svc] = env[k];
     }
   }
@@ -23,8 +18,8 @@ export function buildServiceMap(env = process.env) {
 
 /**
  * Resuelve la URL objetivo para un servicio y un path interno.
- * - service: nombre short (e.g. 'users', 'doctors')
- * - restPath: ruta relativa (e.g. 'health' o 'users/123')
+ * - service: nombre short (e.g. 'appointments', 'doctors')
+ * - restPath: ruta relativa (e.g. 'health' o 'appointments/123')
  * Retorna null si no existe el servicio.
  */
 export function getTargetUrl(serviceMap, service, restPath = "") {
