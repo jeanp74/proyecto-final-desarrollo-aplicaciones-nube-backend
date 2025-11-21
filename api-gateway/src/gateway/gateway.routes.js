@@ -28,8 +28,8 @@ router.get("/modules", authenticateToken, (req, res) => {
 const services = ["appointments", "doctors", "patients", "pharmacy"];
 
 for (const service of services) {
-  router.use(`/${service}`, authenticateToken, async (req, res) => {
-    // ✅ Agregar logs para debuggear
+  router.use(`/${service}/*`, authenticateToken, async (req, res) => {
+    // ✅ Ahora req.params[0] sí contendrá el resto de la ruta
     console.log("=== GATEWAY DEBUG ===");
     console.log("Service:", service);
     console.log("req.params[0]:", req.params[0]);
