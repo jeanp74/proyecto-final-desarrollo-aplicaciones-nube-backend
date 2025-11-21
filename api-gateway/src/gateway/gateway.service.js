@@ -37,7 +37,18 @@ export function getTargetUrl(serviceMap, service, restPath = "") {
     return `${cleanedRoot}/${service}`;
   }
 
-  return finalPath ? `${cleanedRoot}/${finalPath}` : `${cleanedRoot}/${service}`;
+  // ✅ Si finalPath no empieza con el nombre del servicio, agregarlo
+  if (finalPath && !finalPath.startsWith(service)) {
+    return `${cleanedRoot}/${service}/${finalPath}`;
+  }
+
+  // ✅ Si no hay finalPath, usar solo el nombre del servicio
+  if (!finalPath) {
+    return `${cleanedRoot}/${service}`;
+  }
+
+  // ✅ Si ya tiene el nombre del servicio, usar tal cual
+  return `${cleanedRoot}/${finalPath}`;
 }
 
 /**
