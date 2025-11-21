@@ -25,9 +25,20 @@ export function buildServiceMap(env = process.env) {
 export function getTargetUrl(serviceMap, service, restPath = "") {
   const root = serviceMap[service?.toLowerCase()];
   if (!root) return null;
+
   const cleanedRoot = root.replace(/\/$/, "");         // remove trailing slash
-  const cleanedPath = (restPath || "").replace(/^\//, ""); // remove leading slash
-  return cleanedPath ? `${cleanedRoot}/${cleanedPath}` : cleanedRoot;
+
+  // ✅ Ajustar para evitar duplicar la ruta base del servicio
+  // Ej: si el servicio es "doctors", y restPath es "/doctors", no duplicar
+  let finalPath = (restPath || "").replace(/^\//, ""); // remove leading slash
+
+  if (finalPath.startsWith(service + "/") || finalPath === service) {
+    // Si ya empieza con el nombre del servicio, no lo dupliquemos
+    finalPath = finalPath.substring(service.length);
+    if (finalPath.startsWith("/")) finalPath = finalPath.substring(1);
+  }
+
+  return finalPath ? `${cleanedRoot}/${finalPath}` : cleanedRoot;
 }
 
 /**
