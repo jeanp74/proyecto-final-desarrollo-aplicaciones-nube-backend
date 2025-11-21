@@ -3,7 +3,7 @@ import fetch from "node-fetch";
 
 /**
  * Construye el mapa de servicios a partir de las variables de entorno
- * Ejemplo en env: API_APPOINTMENTS=https://appointments-api.azurewebsites.net
+ * Ejemplo en env: API_APPOINTMENTS=https://appointments-api.azurewebsites.net  
  */
 export function buildServiceMap(env = process.env) {
   const map = {};
@@ -27,15 +27,13 @@ export function getTargetUrl(serviceMap, service, restPath = "") {
   if (!root) return null;
 
   const cleanedRoot = root.replace(/\/$/, "");         // remove trailing slash
-
-  // ✅ Ajustar para evitar duplicar la ruta base del servicio
-  // Ej: si el servicio es "doctors", y restPath es "/doctors", no duplicar
   let finalPath = (restPath || "").replace(/^\//, ""); // remove leading slash
 
-  if (finalPath.startsWith(service + "/") || finalPath === service) {
-    // Si ya empieza con el nombre del servicio, no lo dupliquemos
-    finalPath = finalPath.substring(service.length);
-    if (finalPath.startsWith("/")) finalPath = finalPath.substring(1);
+  // ✅ Si la ruta ya empieza con el nombre del servicio, no lo dupliquemos
+  if (finalPath.startsWith(service + "/")) {
+    finalPath = finalPath.substring(service.length + 1); // +1 para el "/"
+  } else if (finalPath === service) {
+    finalPath = ""; // Si es exactamente el nombre del servicio, usar raíz
   }
 
   return finalPath ? `${cleanedRoot}/${finalPath}` : cleanedRoot;
@@ -52,12 +50,6 @@ export function buildFetchOptions(req) {
   delete headers.host;
   delete headers["content-length"];
 
-  // Si quieres filtrar/añadir headers, hazlo aquí.
-  // Por ejemplo, reenviar solo Authorization y Content-Type:
-  // const safeHeaders = {};
-  // if (headers.authorization) safeHeaders.authorization = headers.authorization;
-  // if (headers["content-type"]) safeHeaders["content-type"] = headers["content-type"];
-
   const opts = {
     method: req.method,
     headers,
@@ -66,9 +58,7 @@ export function buildFetchOptions(req) {
 
   // No body for GET/HEAD
   if (req.method !== "GET" && req.method !== "HEAD") {
-    // En express con json body parser, req.body ya es objeto; stringify
     if (req.body !== undefined) {
-      // Si viene un body que no es JSON, podrías adaptar según content-type
       opts.body = JSON.stringify(req.body);
       opts.headers = { ...opts.headers, "content-type": "application/json" };
     }
@@ -79,22 +69,18 @@ export function buildFetchOptions(req) {
 
 /**
  * Realiza el forward con node-fetch y devuelve un objeto con status, headers y body (en texto).
- * No intenta stream ni pipe (para simplicidad). Para archivos grandes usar streams.
  */
 export async function forwardRequestToTarget(targetUrl, fetchOpts, timeoutMs = 15000) {
-  // timeout manual si deseas (node-fetch v3 no trae timeout por defecto)
   const controller = new AbortController();
   const id = setTimeout(() => controller.abort(), timeoutMs);
   try {
     const r = await fetch(targetUrl, { ...fetchOpts, signal: controller.signal });
     clearTimeout(id);
     const text = await r.text();
-    // Copiar headers a un objeto plano
     const respHeaders = {};
     r.headers.forEach((v, k) => {
       respHeaders[k] = v;
     });
-    // Intentar parsear JSON para devolver objeto si aplica
     let body = text;
     try {
       body = JSON.parse(text);
@@ -104,7 +90,6 @@ export async function forwardRequestToTarget(targetUrl, fetchOpts, timeoutMs = 1
     return { status: r.status, headers: respHeaders, body };
   } catch (err) {
     clearTimeout(id);
-    // identifica abort error
     if (err.name === "AbortError") {
       throw new Error("Timeout contacting backend service");
     }
@@ -114,13 +99,10 @@ export async function forwardRequestToTarget(targetUrl, fetchOpts, timeoutMs = 1
 
 /**
  * Envia la respuesta "proxy" al cliente replicando código y headers básicos.
- * Evita reenviar headers no permitidos.
  */
 export function sendForwardedResponse(res, forwarded) {
-  // Copiar headers (con cuidado)
   if (forwarded.headers) {
     for (const [k, v] of Object.entries(forwarded.headers)) {
-      // evitar headers que Node/Express controla
       if (["transfer-encoding", "content-length", "connection"].includes(k.toLowerCase())) continue;
       try {
         res.setHeader(k, v);
@@ -130,7 +112,6 @@ export function sendForwardedResponse(res, forwarded) {
     }
   }
 
-  // Si body es objeto lo envía como JSON, si no lo envía como texto
   if (typeof forwarded.body === "object") {
     res.status(forwarded.status).json(forwarded.body);
   } else {
