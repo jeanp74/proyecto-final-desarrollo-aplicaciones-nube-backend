@@ -29,19 +29,25 @@ const services = ["appointments", "doctors", "patients", "pharmacy"];
 
 for (const service of services) {
   router.use(`/${service}`, authenticateToken, async (req, res) => {
-    // ✅ Evitar que la ruta raíz (/) sea reenviada (que devuelve documentación)
-    if (req.params[0] === "" || req.params[0] === "/") {
-      return res.status(404).json({ error: "Ruta no disponible a través del gateway" });
-    }
+    // ✅ Agregar logs para debuggear
+    console.log("=== GATEWAY DEBUG ===");
+    console.log("Service:", service);
+    console.log("req.params[0]:", req.params[0]);
+    console.log("req.path:", req.path);
+    console.log("req.baseUrl:", req.baseUrl);
 
     const targetUrl = getTargetUrl(serviceMap, service, req.params[0]);
+    console.log("Target URL:", targetUrl);
+
     if (!targetUrl) return res.status(500).json({ error: "Service not configured" });
 
     const opts = buildFetchOptions(req);
     try {
       const result = await forwardRequestToTarget(targetUrl, opts);
+      console.log("Response from backend:", result);
       sendForwardedResponse(res, result);
     } catch (e) {
+      console.error("Gateway error:", e);
       res.status(500).json({ error: e.message });
     }
   });
