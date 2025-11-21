@@ -33,6 +33,12 @@ function signRefreshToken(user) {
 router.post("/login", async (req, res) => {
 
     const { email, password } = req.body;
+
+    console.log("************************************** DEBUG USERS**********************************");
+    console.log(email, password);
+    console.log(demoUsers);
+    console.log("************************************** DEBUG USERS**********************************");
+
     const user = demoUsers.find(u => u.email === email);
 
     if (!user || !(await bcrypt.compare(password, user.password))) {
