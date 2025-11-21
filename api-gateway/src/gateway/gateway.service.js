@@ -33,11 +33,16 @@ export function getTargetUrl(serviceMap, service, restPath = "") {
   if (finalPath.startsWith(service + "/")) {
     finalPath = finalPath.substring(service.length + 1); // +1 para el "/"
   } else if (finalPath === service) {
-    // ✅ Si es exactamente el nombre del servicio, usar la raíz del servicio (ej: /pharmacy)
+    // ✅ Si es exactamente el nombre del servicio, usar la raíz del servicio (ej: /doctors)
     return `${cleanedRoot}/${service}`;
   }
 
-  // ✅ Si finalPath no empieza con el nombre del servicio, agregarlo
+  // ✅ Si finalPath no empieza con el nombre del servicio, agregarlo (excepto para pharmacy)
+  if (service === "pharmacy") {
+    // ✅ Para pharmacy, no duplicar la ruta
+    return finalPath ? `${cleanedRoot}/${finalPath}` : cleanedRoot;
+  }
+
   if (finalPath && !finalPath.startsWith(service)) {
     return `${cleanedRoot}/${service}/${finalPath}`;
   }
