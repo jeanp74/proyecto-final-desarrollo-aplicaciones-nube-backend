@@ -83,6 +83,7 @@ export async function loadUsers() {
     ...mappedPatients,
   ];
 
+  console.log(`USUARIOS CARGADOS: ${demoUsers}`);
   console.log(`Usuarios listos: ${demoUsers.length} cargados`);
 }
 
